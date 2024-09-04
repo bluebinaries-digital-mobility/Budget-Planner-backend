@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 
 const nodeEnvConfig = require("./nodeEnvConfig");
 nodeEnvConfig.envConfig();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 8044;
 app.use(bodyParser.json());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
