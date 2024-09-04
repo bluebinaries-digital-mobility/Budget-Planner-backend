@@ -1,9 +1,6 @@
-const mysqlConnection = require("../config/mySqlconnection");
 const nodeEnvConfig = require("../nodeEnvConfig");
 nodeEnvConfig.envConfig();
 const path = require("path");
-const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
 
 // Import service functions
 const {
@@ -13,6 +10,7 @@ const {
   addBudgetDataService,
   updateBudgetDataService,
   viewBudgetDataService,
+  getSessionService,
 } = require("../service/budgetappservice");
 const { CLIENT_RENEG_LIMIT } = require("tls");
 
@@ -67,7 +65,8 @@ const getCustomerName = async (req, res) => {
 const addBudgetData = async (req, res) => {
   try {
     const data = req.body;
-    const tickets = await addBudgetDataService(data);
+    const created_by = req.user.userId;
+    const tickets = await addBudgetDataService(data, created_by);
     return res.status(200).json({ statusCode: 200, success: true, tickets });
   } catch (err) {
     console.error("Error getting department:", err);
@@ -109,6 +108,36 @@ const updateBudgetData = async (req, res) => {
   }
 };
 
+/**
+ * Controller to get token to check the session in front end
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ */
+const getSession = async (req, res) => {
+  try {
+    const result = await getSessionService(req, res);
+    if (!result) {
+      return res.status(500).json({
+        statusCode: 500,
+        error: true,
+        message: "Something went wrong, Please try later.",
+      });
+    } else {
+      return res.status(200).json({
+        statusCode: 200,
+        error: false,
+        response: result,
+      });
+    }
+  } catch (err) {
+    res.status(500).send({
+      statusCode: 500,
+      error: true,
+      message: "Something went wrong, Please try later.",
+    });
+  }
+};
+
 // Export controller methods
 module.exports = {
   getDepartmentName,
@@ -117,4 +146,5 @@ module.exports = {
   addBudgetData,
   updateBudgetData,
   viewBudgetData,
+  getSession,
 };

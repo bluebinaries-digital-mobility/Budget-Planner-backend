@@ -1,8 +1,6 @@
 const mysqlConnection = require("../config/mySqlconnection");
 const moment = require("moment");
-// const nodemailer = require("nodemailer");
 const nodeEnvConfig = require("../nodeEnvConfig");
-// const { commonEmailTemplate } = require("./commonMailTemplate");
 nodeEnvConfig.envConfig();
 let datetime = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
 const { v4: uuidv4 } = require("uuid");
@@ -80,12 +78,11 @@ const getCustomerFilterService = async () => {
   });
 };
 
-const addBudgetDataService = async (data) => {
+const addBudgetDataService = async (data, created_by) => {
   return new Promise((resolve, reject) => {
     const is_active = true;
-    const created_by = "pravin.s@bluebinaries";
     const query = `
-       INSERT INTO budget_master (region, business_function, practice_name, cost_center, project_name, customer,customer_type,financial_year,f_quarter,created_on,is_active,created_by)
+       INSERT INTO budget_master (region, business_function, practice_name, cost_center, project_name, customer, customer_type, currency, financial_year, f_quarter, created_on, is_active,created_by)
        VALUES (
         ${mysql.escape(data.region)}, 
         ${mysql.escape(data.business_function)}, 
@@ -94,6 +91,7 @@ const addBudgetDataService = async (data) => {
         ${mysql.escape(data.project_name)}, 
         ${mysql.escape(data.customer)}, 
         ${mysql.escape(data.customer_type)}, 
+        ${mysql.escape(data.currency)}, 
         ${mysql.escape(data.financial_year)}, 
         ${mysql.escape(data.f_quarter)}, 
         ${mysql.escape(datetime)}, 
@@ -114,8 +112,8 @@ const addBudgetDataService = async (data) => {
         // Define the SQL query with placeholders
         const query = `
           INSERT INTO budget_child 
-          (master_Id, budget_type, item_description, cost_center, currency, month_1, month_2, month_3, budget_total, created_on, is_active)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
+          (master_Id, budget_type, item_description, cost_center, month_1, month_2, month_3, budget_total, remarks, created_on, created_by, is_active)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
         // Define the values to insert using parameterized query
@@ -124,12 +122,13 @@ const addBudgetDataService = async (data) => {
           data.child[i].budget_type,
           data.child[i].item_description,
           data.child[i].cost_center,
-          data.child[i].currency,
           data.child[i].month_1,
           data.child[i].month_2,
           data.child[i].month_3,
           data.child[i].budget_total,
+          data.child[i].remarks,
           datetime, // Assume datetime is defined elsewhere
+          created_by,
           is_active, // Assume is_active is defined elsewhere
         ];
 
@@ -191,6 +190,23 @@ const viewBudgetDataService = async () => {
     });
   });
 };
+
+/**
+ * Service to return the token to the front end to validate the session
+ * @param {Object} req - The data that contains the token
+ * @returns {Promise} - A promise that resolves with the token
+ */
+const getSessionService = async (req) => {
+  try {
+    // Return a token
+    const tokenValue = req.token;
+    return tokenValue;
+  } catch (err) {
+    console.error("Error in getSessionService:", err);
+    throw err;
+  }
+};
+
 module.exports = {
   getDepartmentFilterService,
   getPraticeFilterService,
@@ -198,4 +214,5 @@ module.exports = {
   addBudgetDataService,
   updateBudgetDataService,
   viewBudgetDataService,
+  getSessionService,
 };

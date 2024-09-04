@@ -8,38 +8,44 @@ const auth = require("../middleware/authentication");
 // Getting assigned tickets
 
 budgetAppRouter.get(
+  "/get-session",
+  auth.verifyToken,
+  budgetAppController.getSession
+);
+
+budgetAppRouter.get(
   "/department-filter",
-  // auth.verifyToken,
+  auth.verifyToken,
   budgetAppController.getDepartmentName
 );
 
 budgetAppRouter.get(
   "/practice-filter",
-  // auth.verifyToken,
+  auth.verifyToken,
   budgetAppController.getPraticeName
 );
 
 budgetAppRouter.get(
   "/customer-filter",
-  // auth.verifyToken,
+  auth.verifyToken,
   budgetAppController.getCustomerName
 );
 
 budgetAppRouter.post(
   "/add-budgetData",
-  // auth.verifyToken,
+  auth.verifyToken,
   budgetAppController.addBudgetData
 );
 
 budgetAppRouter.get(
   "/update-budgetData",
-  // auth.verifyToken,
+  auth.verifyToken,
   budgetAppController.updateBudgetData
 );
 
 budgetAppRouter.get(
   "/view-budgetData",
-  // auth.verifyToken,
+  auth.verifyToken,
   budgetAppController.viewBudgetData
 );
 
