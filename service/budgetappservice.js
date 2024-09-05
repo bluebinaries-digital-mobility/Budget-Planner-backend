@@ -176,7 +176,22 @@ const updateBudgetDataService = async () => {
   });
 };
 
-const viewBudgetDataService = async () => {
+const viewBudgetDataService = async (created_by) => {
+  return new Promise((resolve, reject) => {
+    const query = `
+        SELECT * FROM budget_master LEFT JOIN budget_child ON budget_child.master_Id = budget_master.id WHERE budget_master.created_by = ${created_by} ORDER BY budget_master.id ASC;
+        `;
+    mysqlConnection.query(query, (err, result) => {
+      if (err) {
+        return reject(new Error(`update budget query failed: ${err.message}`));
+      }
+      console.log(result, "lll");
+      resolve(result);
+    });
+  });
+};
+
+const viewBudgetReportService = async () => {
   return new Promise((resolve, reject) => {
     const query = `
         SELECT * FROM budget_master LEFT JOIN budget_child ON budget_child.master_Id = budget_master.id ORDER BY budget_master.id ASC;
@@ -215,4 +230,5 @@ module.exports = {
   updateBudgetDataService,
   viewBudgetDataService,
   getSessionService,
+  viewBudgetReportService,
 };

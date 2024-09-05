@@ -38,15 +38,15 @@ budgetAppRouter.post(
 );
 
 budgetAppRouter.get(
-  "/update-budgetData",
-  auth.verifyToken,
-  budgetAppController.updateBudgetData
-);
-
-budgetAppRouter.get(
   "/view-budgetData",
   auth.verifyToken,
   budgetAppController.viewBudgetData
+);
+
+budgetAppRouter.get(
+  "/view-budgetReport",
+  auth.verifyToken,
+  budgetAppController.viewBudgetReport
 );
 
 module.exports = budgetAppRouter;

@@ -8,7 +8,7 @@ const {
   getPraticeFilterService,
   getCustomerFilterService,
   addBudgetDataService,
-  updateBudgetDataService,
+  viewBudgetReportService,
   viewBudgetDataService,
   getSessionService,
 } = require("../service/budgetappservice");
@@ -33,6 +33,7 @@ const getDepartmentName = async (req, res) => {
   }
 };
 
+// Get Practice Name from DB bhub database
 const getPraticeName = async (req, res) => {
   try {
     const { id } = req.query;
@@ -48,6 +49,7 @@ const getPraticeName = async (req, res) => {
   }
 };
 
+// Get customer Name from DB bhub database
 const getCustomerName = async (req, res) => {
   try {
     const customer = await getCustomerFilterService();
@@ -62,10 +64,11 @@ const getCustomerName = async (req, res) => {
   }
 };
 
+// Add Budget Data from DB budget master database
 const addBudgetData = async (req, res) => {
   try {
     const data = req.body;
-    const created_by = req.user.userId;
+    const created_by = req.user.emailAddress;
     const tickets = await addBudgetDataService(data, created_by);
     return res.status(200).json({ statusCode: 200, success: true, tickets });
   } catch (err) {
@@ -78,10 +81,11 @@ const addBudgetData = async (req, res) => {
   }
 };
 
+// view Budget Data from DB budget master and budget child database based on email
 const viewBudgetData = async (req, res) => {
   try {
-    const data = req.body;
-    const viewData = await viewBudgetDataService();
+    const created_by = req.user.emailAddress;
+    const viewData = await viewBudgetDataService(created_by);
     return res.status(200).json({ statusCode: 200, success: true, viewData });
   } catch (err) {
     console.error("Error getting department:", err);
@@ -93,10 +97,10 @@ const viewBudgetData = async (req, res) => {
   }
 };
 
-const updateBudgetData = async (req, res) => {
+// view Budget Data from DB budget master and budget child database
+const viewBudgetReport = async (req, res) => {
   try {
-    const { data } = req.query;
-    const tickets = await updateBudgetDataService(data);
+    const tickets = await viewBudgetReportService();
     return res.status(200).json({ statusCode: 200, success: true, tickets });
   } catch (err) {
     console.error("Error getting department:", err);
@@ -147,4 +151,5 @@ module.exports = {
   updateBudgetData,
   viewBudgetData,
   getSession,
+  viewBudgetReport,
 };
