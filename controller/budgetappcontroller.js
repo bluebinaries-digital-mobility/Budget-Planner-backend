@@ -148,7 +148,6 @@ module.exports = {
   getPraticeName,
   getCustomerName,
   addBudgetData,
-  updateBudgetData,
   viewBudgetData,
   getSession,
   viewBudgetReport,
