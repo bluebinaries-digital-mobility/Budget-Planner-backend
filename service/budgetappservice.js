@@ -199,8 +199,8 @@ const viewBudgetDataExportService = async (created_by) => {
     const query = `
        SELECT 
        budget_master.region AS Region, 
-      budget_master.business_function AS Department, 
-      budget_master.practice_name AS Practice_Name, 
+      budget_master.business_function AS Business_Function, 
+      budget_master.practice_name AS Department_Practice_Name, 
       budget_master.cost_center_owner AS Cost_Center_Owner, 
       budget_master.project_name AS Project_Name, 
       budget_master.customer AS Customer, 
@@ -264,8 +264,8 @@ const viewReportExportService = async (created_by) => {
     const query = `
       SELECT 
       budget_master.region AS Region, 
-      budget_master.business_function AS Department, 
-      budget_master.practice_name AS Practice_Name, 
+      budget_master.business_function AS Business_Function, 
+      budget_master.practice_name AS Department_Practice_Name,
       budget_master.cost_center_owner AS Cost_Center_Owner, 
       budget_master.project_name AS Project_Name, 
       budget_master.customer AS Customer, 
