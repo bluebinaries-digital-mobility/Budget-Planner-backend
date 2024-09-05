@@ -173,21 +173,7 @@ const viewBudgetDataService = async (created_by) => {
   return new Promise((resolve, reject) => {
     const query = `
       SELECT 
-      budget_master.region AS Region, 
-      budget_master.business_function AS Department, 
-      budget_master.practice_name AS Practice_Name, 
-      budget_master.cost_center AS Cost_Owner, 
-      budget_master.project_name AS Project_Name, 
-      budget_master.customer AS Customer, 
-      budget_master.customer_type AS Customer_Type, 
-      budget_master.currency AS Currency, 
-      budget_child.budget_type AS Budget_Type, 
-      budget_child.item_description AS Item_Details, 
-      budget_child.cost_center AS Cost_Center, 
-      budget_child.month_1 AS "Oct-24", 
-      budget_child.month_2 AS "Nov-24", 
-      budget_child.month_3 AS "Dec-24", 
-      budget_child.budget_total AS Q3_Budget
+     *
         FROM 
           budget_master 
         LEFT JOIN 
@@ -208,35 +194,98 @@ const viewBudgetDataService = async (created_by) => {
   });
 };
 
-const viewBudgetReportService = async () => {
+const viewBudgetDataExportService = async (created_by) => {
   return new Promise((resolve, reject) => {
     const query = `
        SELECT 
-        budget_master.region AS Region, 
-        budget_master.business_function AS Department, 
-        budget_master.practice_name AS Practice_Name, 
-        budget_master.cost_center AS Cost_Owner, 
-        budget_master.project_name AS Project_Name, 
-        budget_master.customer AS Customer, 
-        budget_master.customer_type AS Customer_Type, 
-        budget_master.currency AS Currency, 
-        budget_child.budget_type AS Budget_Type, 
-        budget_child.item_description AS Item_Details, 
-        budget_child.month_1 AS "Oct-24", 
-        budget_child.month_2 AS "Nov-24", 
-        budget_child.month_3 AS "Dec-24", 
-        budget_child.budget_total AS Q3_Budget,
-        budget_child.remarks AS Remarks,
-        budget_master.created_by AS Created_By,
-        budget_master.created_by AS Created_By
+       budget_master.region AS Region, 
+      budget_master.business_function AS Department, 
+      budget_master.practice_name AS Practice_Name, 
+      budget_master.cost_center AS Cost_Owner, 
+      budget_master.project_name AS Project_Name, 
+      budget_master.customer AS Customer, 
+      budget_master.customer_type AS Customer_Type, 
+      budget_master.currency AS Currency, 
+      budget_child.budget_type AS Budget_Type, 
+      budget_child.item_description AS Item_Details, 
+      budget_child.cost_center AS Cost_Center, 
+      budget_child.month_1 AS "Oct-24", 
+      budget_child.month_2 AS "Nov-24", 
+      budget_child.month_3 AS "Dec-24", 
+      budget_child.budget_total AS Q3_Budget,
+      budget_child.remarks AS Remarks
           FROM 
               budget_master 
           LEFT JOIN 
               budget_child 
           ON 
               budget_child.master_Id = budget_master.id
+               WHERE budget_master.created_by = ${mysql.escape(created_by)}
           ORDER BY 
               budget_master.id ASC;
+        `;
+    mysqlConnection.query(query, (err, result) => {
+      if (err) {
+        return reject(new Error(`update budget query failed: ${err.message}`));
+      }
+      console.log(result, "lll");
+      resolve(result);
+    });
+  });
+};
+
+// For Excel Report Export - All Data
+const viewReportService = async () => {
+  return new Promise((resolve, reject) => {
+    const query = `
+      SELECT 
+      *
+        FROM 
+          budget_master 
+        LEFT JOIN 
+            budget_child 
+        ON 
+            budget_child.master_Id = budget_master.id
+         ORDER BY budget_master.id ASC;
+        `;
+    mysqlConnection.query(query, (err, result) => {
+      if (err) {
+        return reject(new Error(`update budget query failed: ${err.message}`));
+      }
+      console.log(result, "lll");
+      resolve(result);
+    });
+  });
+};
+
+// For Excel Report Export - Only Specific User Data
+const viewReportExportService = async (created_by) => {
+  return new Promise((resolve, reject) => {
+    const query = `
+      SELECT 
+      budget_master.region AS Region, 
+      budget_master.business_function AS Department, 
+      budget_master.practice_name AS Practice_Name, 
+      budget_master.cost_center AS Cost_Owner, 
+      budget_master.project_name AS Project_Name, 
+      budget_master.customer AS Customer, 
+      budget_master.customer_type AS Customer_Type, 
+      budget_master.currency AS Currency, 
+      budget_child.budget_type AS Budget_Type, 
+      budget_child.item_description AS Item_Details, 
+      budget_child.cost_center AS Cost_Center, 
+      budget_child.month_1 AS "Oct-24", 
+      budget_child.month_2 AS "Nov-24", 
+      budget_child.month_3 AS "Dec-24", 
+      budget_child.budget_total AS Q3_Budget,
+      budget_child.remarks AS Remarks
+        FROM 
+          budget_master 
+        LEFT JOIN 
+            budget_child 
+        ON 
+            budget_child.master_Id = budget_master.id
+        ORDER BY budget_master.id ASC;
         `;
     mysqlConnection.query(query, (err, result) => {
       if (err) {
@@ -272,5 +321,7 @@ module.exports = {
   updateBudgetDataService,
   viewBudgetDataService,
   getSessionService,
-  viewBudgetReportService,
+  viewReportService,
+  viewReportExportService,
+  viewBudgetDataExportService,
 };

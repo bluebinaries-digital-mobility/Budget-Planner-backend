@@ -8,9 +8,11 @@ const {
   getPraticeFilterService,
   getCustomerFilterService,
   addBudgetDataService,
-  viewBudgetReportService,
+  viewReportService,
   viewBudgetDataService,
   getSessionService,
+  viewReportExportService,
+  viewBudgetDataExportService,
 } = require("../service/budgetappservice");
 const { CLIENT_RENEG_LIMIT } = require("tls");
 
@@ -85,6 +87,7 @@ const addBudgetData = async (req, res) => {
 const viewBudgetData = async (req, res) => {
   try {
     const created_by = req.user.emailAddress;
+    console.log("created_by", created_by);
     const viewData = await viewBudgetDataService(created_by);
     return res.status(200).json({ statusCode: 200, success: true, viewData });
   } catch (err) {
@@ -98,9 +101,40 @@ const viewBudgetData = async (req, res) => {
 };
 
 // view Budget Data from DB budget master and budget child database
+const exportBudgetData = async (req, res) => {
+  try {
+    const created_by = req.user.emailAddress;
+    const tickets = await viewBudgetDataExportService(created_by);
+    return res.status(200).json({ statusCode: 200, success: true, tickets });
+  } catch (err) {
+    console.error("Error getting department:", err);
+    res.status(500).json({
+      statusCode: 500,
+      message: "Something went wrong, Please try later.",
+      err,
+    });
+  }
+};
+
+// view Budget Data from DB budget master and budget child database
 const viewBudgetReport = async (req, res) => {
   try {
-    const tickets = await viewBudgetReportService();
+    const tickets = await viewReportService();
+    return res.status(200).json({ statusCode: 200, success: true, tickets });
+  } catch (err) {
+    console.error("Error getting department:", err);
+    res.status(500).json({
+      statusCode: 500,
+      message: "Something went wrong, Please try later.",
+      err,
+    });
+  }
+};
+
+// view Budget Data from DB budget master and budget child database
+const exportBudgetReport = async (req, res) => {
+  try {
+    const tickets = await viewReportExportService();
     return res.status(200).json({ statusCode: 200, success: true, tickets });
   } catch (err) {
     console.error("Error getting department:", err);
@@ -150,5 +184,7 @@ module.exports = {
   addBudgetData,
   viewBudgetData,
   getSession,
+  exportBudgetData,
   viewBudgetReport,
+  exportBudgetReport,
 };

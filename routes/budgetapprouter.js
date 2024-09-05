@@ -37,16 +37,34 @@ budgetAppRouter.post(
   budgetAppController.addBudgetData
 );
 
+//My Submitted budget
+//List
 budgetAppRouter.get(
   "/view-budgetData",
   auth.verifyToken,
   budgetAppController.viewBudgetData
 );
 
+//Export
+budgetAppRouter.get(
+  "/export-budgetData",
+  auth.verifyToken,
+  budgetAppController.exportBudgetData
+);
+
+//Report
+//List
 budgetAppRouter.get(
   "/view-budgetReport",
   auth.verifyToken,
   budgetAppController.viewBudgetReport
+);
+
+//Export
+budgetAppRouter.get(
+  "/export-budgetReport",
+  auth.verifyToken,
+  budgetAppController.exportBudgetReport
 );
 
 module.exports = budgetAppRouter;
