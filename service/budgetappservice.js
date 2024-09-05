@@ -193,7 +193,9 @@ const viewBudgetDataService = async (created_by) => {
             budget_child 
         ON 
             budget_child.master_Id = budget_master.id
-        WHERE budget_master.created_by = ${created_by} ORDER BY budget_master.id ASC;
+        WHERE budget_master.created_by = ${mysql.escape(
+          created_by
+        )} ORDER BY budget_master.id ASC;
         `;
     mysqlConnection.query(query, (err, result) => {
       if (err) {
