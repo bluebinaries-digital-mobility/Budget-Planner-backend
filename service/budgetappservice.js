@@ -183,6 +183,7 @@ const viewBudgetDataService = async (created_by) => {
       budget_master.currency AS Currency, 
       budget_child.budget_type AS Budget_Type, 
       budget_child.item_description AS Item_Details, 
+      budget_child.cost_center AS Cost_Center, 
       budget_child.month_1 AS "Oct-24", 
       budget_child.month_2 AS "Nov-24", 
       budget_child.month_3 AS "Dec-24", 
