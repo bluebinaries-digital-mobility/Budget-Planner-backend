@@ -75,12 +75,12 @@ const addBudgetDataService = async (data, created_by) => {
   return new Promise((resolve, reject) => {
     const is_active = true;
     const query = `
-       INSERT INTO budget_master (region, business_function, practice_name, cost_center, project_name, customer, customer_type, currency, financial_year, f_quarter, created_on, is_active,created_by)
+       INSERT INTO budget_master (region, business_function, practice_name, cost_center_owner, project_name, customer, customer_type, currency, financial_year, f_quarter, created_on, is_active,created_by)
        VALUES (
         ${mysql.escape(data.region)}, 
         ${mysql.escape(data.business_function)}, 
         ${mysql.escape(data.practice_name)}, 
-        ${mysql.escape(data.cost_center)}, 
+        ${mysql.escape(data.cost_center_owner)}, 
         ${mysql.escape(data.project_name)}, 
         ${mysql.escape(data.customer)}, 
         ${mysql.escape(data.customer_type)}, 
