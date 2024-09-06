@@ -2,7 +2,7 @@ const mysqlConnection = require("../config/mySqlconnection");
 const moment = require("moment");
 const nodeEnvConfig = require("../nodeEnvConfig");
 nodeEnvConfig.envConfig();
-let date_time = moment.format("YYYY-MM-DD HH:mm:ss");
+let datetime = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
 const { v4: uuidv4 } = require("uuid");
 const mysql = require("mysql");
 
