@@ -326,7 +326,7 @@ const getMailId = async (userId) => {
       //    AND is_active = 1
       //  `
 
-      let query = `SELECT user_id as userId FROM bhub_pmt_access_matrix WHERE user_id = '${userId}' AND is_active = 1;`;
+      let query = `SELECT user_id as userId FROM bhub_budget_planner_access_matrix WHERE user_id = '${userId}' AND is_active = 1;`;
       mysqlConnection.query(query, async (err, rows) => {
         if (!err) {
           if (rows[0].length > 0 || rows[1].length > 0 || rows[2].length > 0) {
