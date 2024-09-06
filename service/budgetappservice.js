@@ -1,11 +1,8 @@
 const mysqlConnection = require("../config/mySqlconnection");
-const moment = require("moment-timezone");
+const moment = require("moment");
 const nodeEnvConfig = require("../nodeEnvConfig");
 nodeEnvConfig.envConfig();
-let date_time = moment
-  .utc(utcTime)
-  .tz("Asia/Kolkata")
-  .format("YYYY-MM-DD HH:mm:ss");
+let date_time = moment.format("YYYY-MM-DD HH:mm:ss");
 const { v4: uuidv4 } = require("uuid");
 const mysql = require("mysql");
 
