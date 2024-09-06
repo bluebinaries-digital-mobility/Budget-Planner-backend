@@ -67,4 +67,11 @@ budgetAppRouter.get(
   budgetAppController.exportBudgetReport
 );
 
+//Export
+budgetAppRouter.get(
+  "/getAccessMailId",
+  auth.verifyToken,
+  budgetAppController.getAccessMailId
+);
+
 module.exports = budgetAppRouter;

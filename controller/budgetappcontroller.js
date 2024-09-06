@@ -13,6 +13,7 @@ const {
   getSessionService,
   viewReportExportService,
   viewBudgetDataExportService,
+  getMailId,
 } = require("../service/budgetappservice");
 const { CLIENT_RENEG_LIMIT } = require("tls");
 
@@ -146,6 +147,22 @@ const exportBudgetReport = async (req, res) => {
   }
 };
 
+// view Budget Data from DB budget master and budget child database
+const getAccessMailId = async (req, res) => {
+  try {
+    const userId = req.user.emailAddress;
+    const mailId = await getMailId(userId);
+    return res.status(200).json({ statusCode: 200, success: true, mailId });
+  } catch (err) {
+    console.error("Error getting department:", err);
+    res.status(500).json({
+      statusCode: 500,
+      message: "Something went wrong, Please try later.",
+      err,
+    });
+  }
+};
+
 /**
  * Controller to get token to check the session in front end
  * @param {Object} req - The request object
@@ -187,4 +204,5 @@ module.exports = {
   exportBudgetData,
   viewBudgetReport,
   exportBudgetReport,
+  getAccessMailId,
 };

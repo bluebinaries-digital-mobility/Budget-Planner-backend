@@ -313,6 +313,25 @@ const getSessionService = async (req) => {
   }
 };
 
+const getMailId = async (userId) => {
+  return new Promise((resolve, reject) => {
+    const query = `
+      SELECT 
+      *
+        FROM 
+          budget_access_matrix WHERE userId = ${userId} 
+        ;
+        `;
+    mysqlConnection.query(query, (err, result) => {
+      if (err) {
+        return reject(new Error(`update budget query failed: ${err.message}`));
+      }
+      console.log(result, "lll");
+      resolve(result);
+    });
+  });
+};
+
 module.exports = {
   getDepartmentFilterService,
   getPraticeFilterService,
@@ -324,4 +343,5 @@ module.exports = {
   viewReportService,
   viewReportExportService,
   viewBudgetDataExportService,
+  getMailId,
 };
