@@ -194,6 +194,8 @@ const viewBudgetDataService = async (created_by) => {
   });
 };
 
+// budget_master.customer AS Customer,
+// budget_master.customer_type AS Customer_Type,
 const viewBudgetDataExportService = async (created_by) => {
   return new Promise((resolve, reject) => {
     const query = `
@@ -202,9 +204,7 @@ const viewBudgetDataExportService = async (created_by) => {
       budget_master.business_function AS Business_Function, 
       budget_master.practice_name AS Department_Practice_Name, 
       budget_master.cost_center_owner AS Cost_Center_Owner, 
-      budget_master.project_name AS Project_Name, 
-      budget_master.customer AS Customer, 
-      budget_master.customer_type AS Customer_Type, 
+      budget_master.project_name AS Project_Name,  
       budget_master.currency AS Currency, 
       budget_child.budget_type AS Budget_Type, 
       budget_child.item_description AS Item_Details, 
@@ -259,6 +259,8 @@ const viewReportService = async () => {
 };
 
 // For Excel Report Export - Only Specific User Data
+// budget_master.customer AS Customer,
+// budget_master.customer_type AS Customer_Type,
 const viewReportExportService = async (created_by) => {
   return new Promise((resolve, reject) => {
     const query = `
@@ -268,8 +270,6 @@ const viewReportExportService = async (created_by) => {
       budget_master.practice_name AS Department_Practice_Name,
       budget_master.cost_center_owner AS Cost_Center_Owner, 
       budget_master.project_name AS Project_Name, 
-      budget_master.customer AS Customer, 
-      budget_master.customer_type AS Customer_Type, 
       budget_master.currency AS Currency, 
       budget_child.budget_type AS Budget_Type, 
       budget_child.item_description AS Item_Details, 
