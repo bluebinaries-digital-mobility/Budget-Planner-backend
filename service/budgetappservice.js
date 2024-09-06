@@ -2,7 +2,7 @@ const mysqlConnection = require("../config/mySqlconnection");
 const moment = require("moment");
 const nodeEnvConfig = require("../nodeEnvConfig");
 nodeEnvConfig.envConfig();
-let datetime = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
+let date_time = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
 const { v4: uuidv4 } = require("uuid");
 const mysql = require("mysql");
 
@@ -87,7 +87,7 @@ const addBudgetDataService = async (data, created_by) => {
         ${mysql.escape(data.currency)}, 
         ${mysql.escape(data.financial_year)}, 
         ${mysql.escape(data.f_quarter)}, 
-        ${mysql.escape(datetime)}, 
+        ${mysql.escape(date_time)}, 
         ${mysql.escape(is_active)},
         ${mysql.escape(created_by)}
 
@@ -120,7 +120,7 @@ const addBudgetDataService = async (data, created_by) => {
           data.child[i].month_3,
           data.child[i].budget_total,
           data.child[i].remarks,
-          datetime, // Assume datetime is defined elsewhere
+          date_time, // Assume datetime is defined elsewhere
           created_by,
           is_active, // Assume is_active is defined elsewhere
         ];
