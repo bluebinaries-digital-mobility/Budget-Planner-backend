@@ -213,7 +213,9 @@ const viewBudgetDataExportService = async (created_by) => {
       budget_child.month_2 AS "Nov-24", 
       budget_child.month_3 AS "Dec-24", 
       budget_child.budget_total AS Q3_Budget,
-      budget_child.remarks AS Remarks
+      budget_child.remarks AS Remarks,
+      budget_master.created_by AS Created_By,
+      budget_master.created_on AS Created_On
           FROM 
               budget_master 
           LEFT JOIN 
@@ -278,7 +280,9 @@ const viewReportExportService = async (created_by) => {
       budget_child.month_2 AS "Nov-24", 
       budget_child.month_3 AS "Dec-24", 
       budget_child.budget_total AS Q3_Budget,
-      budget_child.remarks AS Remarks
+      budget_child.remarks AS Remarks,
+      budget_master.created_by AS Created_By,
+      budget_master.created_on AS Created_On
         FROM 
           budget_master 
         LEFT JOIN 
