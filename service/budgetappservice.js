@@ -87,7 +87,7 @@ const addBudgetDataService = async (data, created_by) => {
         ${mysql.escape(data.currency)}, 
         ${mysql.escape(data.financial_year)}, 
         ${mysql.escape(data.f_quarter)}, 
-        ${mysql.escape(date_time)}, 
+        ${mysql.escape(datetime)}, 
         ${mysql.escape(is_active)},
         ${mysql.escape(created_by)}
 
@@ -120,7 +120,7 @@ const addBudgetDataService = async (data, created_by) => {
           data.child[i].month_3,
           data.child[i].budget_total,
           data.child[i].remarks,
-          date_time, // Assume datetime is defined elsewhere
+          datetime, // Assume datetime is defined elsewhere
           created_by,
           is_active, // Assume is_active is defined elsewhere
         ];
