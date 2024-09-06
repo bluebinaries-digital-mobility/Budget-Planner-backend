@@ -151,8 +151,8 @@ const exportBudgetReport = async (req, res) => {
 const getAccessMailId = async (req, res) => {
   try {
     const userid = req.user.userId;
-    const mailId = await getMailId(userid);
-    return res.status(200).json({ statusCode: 200, success: true, mailId });
+    const userAccess = await getMailId(userid);
+    return res.status(200).json({ statusCode: 200, success: true, userAccess });
   } catch (err) {
     console.error("Error getting department:", err);
     res.status(500).json({

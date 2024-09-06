@@ -326,16 +326,15 @@ const getMailId = async (userId) => {
       //    AND is_active = 1
       //  `
       // console.log(userId, "userId");
-      let query = `SELECT super_access as userId FROM bhub_budget_planner_access_matrix WHERE user_id = ${userId} AND is_active = 1 AND super_access = 1 ;`;
+      let query = `SELECT *  FROM bhub_budget_planner_access_matrix WHERE user_id = ${userId} AND is_active = 1 ;`;
       mysqlConnection.query(query, async (err, rows) => {
         if (!err) {
           // console.log(rows, "rows");
           if (rows?.length > 0) {
-            resolve({
-              error: false,
-              access: true,
+            resolve(
+              rows
               // accessData: rows[0],
-            });
+            );
           } else {
             console.log(err);
             resolve({
