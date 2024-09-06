@@ -326,22 +326,21 @@ const getMailId = async (userId) => {
       //    AND is_active = 1
       //  `
       // console.log(userId, "userId");
+      let data = {
+        pmo_access: 0,
+        super_access: 0,
+      };
       let query = `SELECT *  FROM bhub_budget_planner_access_matrix WHERE user_id = ${userId} AND is_active = 1 ;`;
       mysqlConnection.query(query, async (err, rows) => {
         if (!err) {
           // console.log(rows, "rows");
           if (rows?.length > 0) {
-            resolve(
-              rows
-              // accessData: rows[0],
-            );
+            data.pmo_access = rows[0]?.pmo_access;
+            data.super_access = rows[0]?.super_access;
+            resolve(data);
           } else {
             console.log(err);
-            resolve({
-              error: false,
-              access: false,
-              // accessData: {},
-            });
+            resolve(data);
           }
         } else {
           reject({
