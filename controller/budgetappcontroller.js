@@ -150,7 +150,7 @@ const exportBudgetReport = async (req, res) => {
 // view Budget Data from DB budget master and budget child database
 const getAccessMailId = async (req, res) => {
   try {
-    const userId = req.user.emailAddress;
+    const userId = req.user.userId;
     const mailId = await getMailId(userId);
     return res.status(200).json({ statusCode: 200, success: true, mailId });
   } catch (err) {

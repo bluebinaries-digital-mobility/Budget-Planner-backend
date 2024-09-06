@@ -315,20 +315,47 @@ const getSessionService = async (req) => {
 
 const getMailId = async (userId) => {
   return new Promise((resolve, reject) => {
-    const query = `
-      SELECT 
-      *
-        FROM 
-          budget_access_matrix WHERE userId = ${userId} 
-        ;
-        `;
-    mysqlConnection.query(query, (err, result) => {
-      if (err) {
-        return reject(new Error(`update budget query failed: ${err.message}`));
-      }
-      console.log(result, "lll");
-      resolve(result);
-    });
+    try {
+      //    let query = `SELECT
+      //    user_id as userId
+
+      //  FROM
+      //    bhub_pmt_access_matrix
+      //  WHERE
+      //    user_id = '${userId}'
+      //    AND is_active = 1
+      //  `
+
+      let query = `SELECT user_id as userId FROM bhub_pmt_access_matrix WHERE user_id = '${userId}' AND is_active = 1;`;
+      mysqlConnection.query(query, async (err, rows) => {
+        if (!err) {
+          if (rows[0].length > 0 || rows[1].length > 0 || rows[2].length > 0) {
+            resolve({
+              error: false,
+              access: true,
+              // accessData: rows[0],
+            });
+          } else {
+            console.log(err);
+            resolve({
+              error: false,
+              access: false,
+              // accessData: {},
+            });
+          }
+        } else {
+          reject({
+            error: true,
+            message: "something went wrong, Please try later.",
+          });
+        }
+      });
+    } catch (err) {
+      reject({
+        error: true,
+        message: "something went wrong, Please try later.",
+      });
+    }
   });
 };
 
