@@ -22,7 +22,7 @@ const verifyToken = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.TOKEN_KEY);
     req.user = decoded;
     if (Date.now() >= decoded.exp * 8000) {
-      return false;
+      return true;
     }
   } catch (err) {
     return res.status(401).send({
