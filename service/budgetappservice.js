@@ -99,7 +99,7 @@ const addBudgetDataService = async (data, created_by) => {
       const promises = [];
 
       for (let i = 0; i < data.child.length; i++) {
-        if (!data.child[i].budget_type) {
+        if (!data.child[i].budget_type || !data.child[i].budget_total) {
           continue; // Skip to the next iteration
         }
         // Define the SQL query with placeholders
