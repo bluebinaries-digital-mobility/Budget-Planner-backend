@@ -179,13 +179,13 @@ const viewBudgetDataService = async (created_by) => {
       budget_child.budget_type AS budget_type, 
       budget_child.item_description AS item_description, 
       budget_child.cost_center AS cost_center, 
-      budget_child.month_1 AS month_1, 
-      budget_child.month_2 AS month_2, 
-      budget_child.month_3 AS month_3, 
-      budget_child.budget_total AS budget_total,
+      FORMAT(budget_child.month_1, 2) AS month_1, 
+      FORMAT(budget_child.month_2, 2) AS month_2, 
+      FORMAT(budget_child.month_3, 2) AS month_3, 
+      FORMAT(budget_child.budget_total, 2) AS budget_total,
       budget_child.remarks AS remarks,
       budget_master.created_by AS created_by,
-      budget_master.created_on AS created_on
+      DATE_FORMAT(budget_master.created_on, '%d-%m-%Y %H:%i:%s') AS created_on
         FROM 
           budget_master 
         LEFT JOIN 
@@ -222,13 +222,13 @@ const viewBudgetDataExportService = async (created_by) => {
       budget_child.budget_type AS Budget_Type, 
       budget_child.item_description AS Item_Description, 
       budget_child.cost_center AS Cost_Center, 
-      budget_child.month_1 AS "Oct-24", 
-      budget_child.month_2 AS "Nov-24", 
-      budget_child.month_3 AS "Dec-24", 
-      budget_child.budget_total AS Q3_Budget,
+      FORMAT(budget_child.month_1, 2) AS "Oct-24", 
+      FORMAT(budget_child.month_2, 2) AS "Nov-24", 
+      FORMAT(budget_child.month_3, 2) AS "Dec-24", 
+      FORMAT(budget_child.budget_total, 2) AS Q3_Budget,
       budget_child.remarks AS Remarks,
       budget_master.created_by AS Created_By,
-      budget_master.created_on AS Created_On
+       DATE_FORMAT(budget_master.created_on, '%d-%m-%Y %H:%i:%s') AS Created_On
           FROM 
               budget_master 
           LEFT JOIN 
@@ -262,13 +262,13 @@ const viewReportService = async () => {
       budget_child.budget_type AS budget_type, 
       budget_child.item_description AS item_description, 
       budget_child.cost_center AS cost_center, 
-      budget_child.month_1 AS month_1, 
-      budget_child.month_2 AS month_2, 
-      budget_child.month_3 AS month_3, 
-      budget_child.budget_total AS budget_total,
+      FORMAT(budget_child.month_1, 2) AS month_1, 
+      FORMAT(budget_child.month_2, 2) AS month_2, 
+      FORMAT(budget_child.month_3, 2) AS month_3, 
+      FORMAT(budget_child.budget_total, 2) AS budget_total,
       budget_child.remarks AS remarks,
       budget_master.created_by AS created_by,
-      budget_master.created_on AS created_on
+      DATE_FORMAT(budget_master.created_on, '%d-%m-%Y %H:%i:%s') AS created_on
         FROM 
           budget_master 
         LEFT JOIN 
@@ -302,13 +302,13 @@ const viewReportExportService = async (created_by) => {
       budget_child.budget_type AS Budget_Type, 
       budget_child.item_description AS Item_Description, 
       budget_child.cost_center AS Cost_Center, 
-      budget_child.month_1 AS "Oct-24", 
-      budget_child.month_2 AS "Nov-24", 
-      budget_child.month_3 AS "Dec-24", 
-      budget_child.budget_total AS Q3_Budget,
+      FORMAT(budget_child.month_1, 2) AS "Oct-24", 
+      FORMAT(budget_child.month_2, 2) AS "Nov-24", 
+      FORMAT(budget_child.month_3, 2) AS "Dec-24", 
+      FORMAT(budget_child.budget_total, 2) AS Q3_Budget,
       budget_child.remarks AS Remarks,
       budget_master.created_by AS Created_By,
-      budget_master.created_on AS Created_On
+       DATE_FORMAT(budget_master.created_on, '%d-%m-%Y %H:%i:%s') AS Created_On
         FROM 
           budget_master 
         LEFT JOIN 
