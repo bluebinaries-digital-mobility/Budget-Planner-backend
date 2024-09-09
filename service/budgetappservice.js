@@ -22,7 +22,6 @@ const getDepartmentFilterService = async () => {
           new Error(`getDepartmentFilterService query failed: ${err.message}`)
         );
       }
-      console.log(result, "lll");
       resolve(result);
     });
   });
@@ -65,7 +64,6 @@ const getCustomerFilterService = async () => {
           new Error(`getCustomerFilterService query failed: ${err.message}`)
         );
       }
-      console.log(result, "lll");
       resolve(result);
     });
   });
@@ -163,7 +161,6 @@ const updateBudgetDataService = async () => {
       if (err) {
         return reject(new Error(`update budget query failed: ${err.message}`));
       }
-      console.log(result, "lll");
       resolve(result);
     });
   });
@@ -173,7 +170,22 @@ const viewBudgetDataService = async (created_by) => {
   return new Promise((resolve, reject) => {
     const query = `
       SELECT 
-     *
+     budget_master.region AS region, 
+      budget_master.business_function AS business_function, 
+      budget_master.practice_name AS practice_name, 
+      budget_master.cost_center_owner AS cost_center_owner, 
+      budget_master.project_name AS project_name,  
+      budget_master.currency AS currency, 
+      budget_child.budget_type AS budget_type, 
+      budget_child.item_description AS item_description, 
+      budget_child.cost_center AS cost_center, 
+      budget_child.month_1 AS month_1, 
+      budget_child.month_2 AS month_2, 
+      budget_child.month_3 AS month_3, 
+      budget_child.budget_total AS budget_total,
+      budget_child.remarks AS remarks,
+      budget_master.created_by AS created_by,
+      budget_master.created_on AS created_on
         FROM 
           budget_master 
         LEFT JOIN 
@@ -185,10 +197,11 @@ const viewBudgetDataService = async (created_by) => {
         )} ORDER BY budget_master.id ASC;
         `;
     mysqlConnection.query(query, (err, result) => {
+      console.log(query, "queryquery");
       if (err) {
         return reject(new Error(`update budget query failed: ${err.message}`));
       }
-      console.log(result, "lll");
+      // console.log(result, "lll");
       resolve(result);
     });
   });
@@ -230,7 +243,6 @@ const viewBudgetDataExportService = async (created_by) => {
       if (err) {
         return reject(new Error(`update budget query failed: ${err.message}`));
       }
-      console.log(result, "lll");
       resolve(result);
     });
   });
@@ -240,8 +252,23 @@ const viewBudgetDataExportService = async (created_by) => {
 const viewReportService = async () => {
   return new Promise((resolve, reject) => {
     const query = `
-      SELECT 
-      *
+     SELECT 
+     budget_master.region AS region, 
+      budget_master.business_function AS business_function, 
+      budget_master.practice_name AS practice_name, 
+      budget_master.cost_center_owner AS cost_center_owner, 
+      budget_master.project_name AS project_name,  
+      budget_master.currency AS currency, 
+      budget_child.budget_type AS budget_type, 
+      budget_child.item_description AS item_description, 
+      budget_child.cost_center AS cost_center, 
+      budget_child.month_1 AS month_1, 
+      budget_child.month_2 AS month_2, 
+      budget_child.month_3 AS month_3, 
+      budget_child.budget_total AS budget_total,
+      budget_child.remarks AS remarks,
+      budget_master.created_by AS created_by,
+      budget_master.created_on AS created_on
         FROM 
           budget_master 
         LEFT JOIN 
@@ -254,7 +281,6 @@ const viewReportService = async () => {
       if (err) {
         return reject(new Error(`update budget query failed: ${err.message}`));
       }
-      console.log(result, "lll");
       resolve(result);
     });
   });
@@ -295,7 +321,6 @@ const viewReportExportService = async (created_by) => {
       if (err) {
         return reject(new Error(`update budget query failed: ${err.message}`));
       }
-      console.log(result, "lll");
       resolve(result);
     });
   });
