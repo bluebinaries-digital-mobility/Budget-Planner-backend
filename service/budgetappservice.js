@@ -113,9 +113,9 @@ const addBudgetDataService = async (data, created_by) => {
           data.child[i].budget_type,
           data.child[i].item_description,
           data.child[i].cost_center,
-          data.child[i].month_1 === " " ? 0 : data.child[i].month_1,
-          data.child[i].month_2 === " " ? 0 : data.child[i].month_2,
-          data.child[i].month_3 === " " ? 0 : data.child[i].month_3,
+          data.child[i].month_1 === "" ? 0 : data.child[i].month_1,
+          data.child[i].month_2 === "" ? 0 : data.child[i].month_2,
+          data.child[i].month_3 === "" ? 0 : data.child[i].month_3,
           data.child[i].budget_total,
           data.child[i].remarks,
           datetime, // Assume datetime is defined elsewhere
