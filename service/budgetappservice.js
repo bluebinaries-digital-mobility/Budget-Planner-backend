@@ -34,7 +34,6 @@ const getDepartmentFilterService = async () => {
  */
 const getPraticeFilterService = async (unitId) => {
   return new Promise((resolve, reject) => {
-    console.log(unitId, "id");
     const query = `
 SELECT * FROM main_departments WHERE isactive='1' AND unitid='${unitId}';        `;
     mysqlConnection.query(query, (err, result) => {
@@ -134,14 +133,13 @@ const addBudgetDataService = async (data, created_by) => {
                   new Error(`Add budget query failed: ${err.message}`)
                 );
               }
-              console.log(result, "lll");
+
               resolve(result);
             });
           })
         );
       }
 
-      console.log(result, "lll");
       resolve(result);
     });
   });
@@ -199,7 +197,6 @@ const viewBudgetDataService = async (created_by) => {
         )} ORDER BY budget_master.id ASC;
         `;
     mysqlConnection.query(query, (err, result) => {
-      console.log(query, "queryquery");
       if (err) {
         return reject(new Error(`update budget query failed: ${err.message}`));
       }
