@@ -99,6 +99,9 @@ const addBudgetDataService = async (data, created_by) => {
       const promises = [];
 
       for (let i = 0; i < data.child.length; i++) {
+        if (!data.child[i].budget_type) {
+          continue; // Skip to the next iteration
+        }
         // Define the SQL query with placeholders
         const query = `
           INSERT INTO budget_child 
