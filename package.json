@@ -4,7 +4,7 @@
   "description": "A small budget app for finance team.",
   "main": "index.js",
   "scripts": {
-    "dev": "export NODE_ENV=dev&&nodemon index.js",
+    "dev": "SET NODE_ENV=dev&&nodemon index.js",
     "qa": "export NODE_ENV=qa&&nodemon index.js",
     "prepod": "export NODE_ENV=prepod&&nodemon index.js"
   },
