@@ -13,7 +13,6 @@ import { getUserAccessList } from "../../services/sidebarService";
 const Sidebar = () => {
   const [accessUser, setAccessUser] = useState(false);
 
-
   // const accessUser = [
   //   "devanshi.jadav@yopmail.com",
   //   "kishore@bluebinaries.com",
@@ -28,6 +27,7 @@ const Sidebar = () => {
   useEffect(() => {
     getUserAccessList()
       .then((res) => {
+        console.log("res", res);
         if (res.status === 200 && res.data) {
           setAccessUser(res.data.userAccess?.super_access);
         }
@@ -53,9 +53,7 @@ const Sidebar = () => {
             <span>Plan The Budget</span>
           </div>
         </NavLink>
-        <NavLink
-          to={routePath.budgetView}
-        >
+        <NavLink to={routePath.budgetView}>
           <div className="project-con">
             <img src={submitImg} alt="project" />
             <span>My Submitted Budget</span>

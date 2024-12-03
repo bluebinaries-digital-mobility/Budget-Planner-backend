@@ -31,7 +31,7 @@ const BudgetSheet = () => {
   const [formErr, setFormErr] = useState();
   const [loader, setLoader] = useState(false);
 
-  const months = ["Oct-24", "Nov-24", "Dec-24"];
+  const months = ["Jan-25", "Feb-25", "Mar-25"];
 
   const currencySymbols = {
     INR: "&#8377;",
@@ -98,7 +98,7 @@ const BudgetSheet = () => {
     currency: "",
     // customer_type: "",
     financial_year: "2024-2025",
-    f_quarter: "3",
+    f_quarter: "4",
   });
 
   const [BusinessFunction, setBusinessFunction] = useState([]);
@@ -524,7 +524,7 @@ const BudgetSheet = () => {
                             <tr className="">
                               <th className="header-th" colSpan="12">
                                 <div>
-                                  TOTAL Q3 BUDGET:
+                                  TOTAL Q4 BUDGET:
                                   <span>
                                     {`${decode(currencyIcon(), {
                                       level: "html5",

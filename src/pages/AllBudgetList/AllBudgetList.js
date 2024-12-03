@@ -111,9 +111,9 @@ const AllBudgetList = () => {
                     <th>Cost Center</th>
                     <th>Item Description</th>
                     <th>Currency</th>
-                    <th>Oct-24</th>
-                    <th>Nov-24</th>
-                    <th>Dec-24</th>
+                    <th>Jan-25</th>
+                    <th>Feb-25</th>
+                    <th>Mar-25</th>
                     <th>Total</th>
                     <th>Remarks</th>
                   </tr>
