@@ -71,3 +71,83 @@ export const calculateTotals = (data, months, commonMonthMap, tabName) => {
 
   return totals;
 };
+
+//get current quarter month
+export const getQuarter = () => {
+  let quarterMonths = {
+    q1: ["Apr", "May", "Jun"],
+    q2: ["Jul", "Aug", "Sep"],
+    q3: ["Oct", "Nov", "Dec"],
+    q4: ["Jan", "Feb", "Mar"],
+  };
+  let currentDate = new Date();
+
+  let getMonth = currentDate.getMonth(); //0 to 11
+  let currMonth = getMonth + 1; //1 to 12
+  let currYear = currentDate.getFullYear();
+
+  let quarterData = {
+    // month: "",
+    quarter: "",
+    quarter_months: [],
+    year: "",
+  };
+
+  const getNextQuarter = (q, months, year) => {
+    quarterData = {
+      quarter: q,
+      quarter_months: months,
+      year: year,
+    };
+  };
+
+  //Q-4
+  if (currMonth >= 1 && currMonth <= 3) {
+    let lastYear = currYear - 1; //current Quarter of the FY
+    quarterData = {
+      quarter: 4,
+      quarter_months: quarterMonths["q4"],
+      year: lastYear,
+    };
+    //if last month of the quarter, shows next quarter
+    if (currMonth === 3) {
+      getNextQuarter(1, quarterMonths["q1"], currYear);
+    }
+  }
+  //Q-1
+  if (currMonth > 3 && currMonth <= 6) {
+    quarterData = {
+      quarter: 1,
+      quarter_months: quarterMonths["q1"],
+      year: currYear,
+    };
+    if (currMonth === 6) {
+      getNextQuarter(2, quarterMonths["q2"], currYear);
+    }
+  }
+  //Q-2
+  if (currMonth > 6 && currMonth <= 9) {
+    quarterData = {
+      quarter: 2,
+      quarter_months: quarterMonths["q2"],
+      year: currYear,
+    };
+    if (currMonth === 9) {
+      getNextQuarter(3, quarterMonths["q3"], currYear);
+    }
+  }
+  //Q-3
+  if (currMonth > 9 && currMonth <= 12) {
+    quarterData = {
+      quarter: 3,
+      quarter_months: quarterMonths["q3"],
+      year: currYear,
+    };
+    if (currMonth === 12) {
+      let nextYear = currYear + 1; //showing next year in Dec month.
+      getNextQuarter(4, quarterMonths["q4"], nextYear);
+    }
+  }
+
+  return quarterData;
+};
