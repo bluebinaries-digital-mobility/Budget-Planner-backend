@@ -6,11 +6,10 @@ import deleteIcon from "../../assets/images/delete.png";
 import DropdownIcon from "../../assets/images/down-arrow.png";
 
 import {
-  calculateRowTotal,
-  calculateTotals,
-  getMonthValue,
   getQuarter,
-  monthMap,
+  returnColumnValue,
+  returnTotalRowValue,
+  returnTotalsBudget,
 } from "../../utils/helpers";
 import { formValidation, handleFocusFormData } from "../../utils/validation";
 import {
@@ -32,7 +31,7 @@ const BudgetSheet = () => {
   const [formErr, setFormErr] = useState();
   const [loader, setLoader] = useState(false);
 
-  const months = ["Jan-25", "Feb-25", "Mar-25"];
+  // const months = ["Jan-25", "Feb-25", "Mar-25"];
   let currentQuarter = getQuarter();
 
   console.log("currentQuarter", currentQuarter);
@@ -63,31 +62,20 @@ const BudgetSheet = () => {
     { name: "GBP", value: "GBP" },
   ];
 
-  const CustomerType = [
-    { name: "OEM", value: "OEM" },
-    { name: "System Supplier", value: "System Supplier" },
-    {
-      name: "Technology Platform or Solution Providers",
-      value: "Technology Platform or Solution Providers",
-    },
-    { name: "Semiconductor Suppliers", value: "Semiconductor Suppliers" },
-    { name: "Not Applicable", value: "Not Applicable" },
-  ];
   const [budgetDataApi, setBudgetDataApi] = useState([
     {
-      budget_type: "",
-      budget_total: 0,
+      budget_type: "", //resource, capex..
       item_description: "",
       cost_center: "",
-      entries: [
-        { budgetMonth: "10", year: "24", estimatedBudget: "" },
-        { budgetMonth: "11", year: "24", estimatedBudget: "" },
-        { budgetMonth: "12", year: "24", estimatedBudget: "" },
-      ],
+      budget_total: 0,
+      // entries: [
+      //   { budgetMonth: "10", year: "24", estimatedBudget: "" },
+      //   { budgetMonth: "11", year: "24", estimatedBudget: "" },
+      //   { budgetMonth: "12", year: "24", estimatedBudget: "" },
+      // ],
       month_1: "",
       month_2: "",
       month_3: "",
-      // budget_total: "",
       remarks: "",
     },
   ]);
@@ -98,12 +86,14 @@ const BudgetSheet = () => {
     cost_center_owner: "",
     project_name: "",
     practice_name: "",
-    // customer: "",
     currency: "",
-    // customer_type: "",
-    financial_year: "2024-2025",
-    f_quarter: "4",
+    financial_year: currentQuarter?.financial_year,
+    f_quarter: currentQuarter?.quarter,
+    // financial_year: "2024-2025",
+    // f_quarter: "4",
   });
+  console.log("formValues", formValues);
+  console.log("budgetDataApi", budgetDataApi);
 
   const [BusinessFunction, setBusinessFunction] = useState([]);
   const [practiceNameApi, setPracticeApiData] = useState([]);
@@ -181,13 +171,6 @@ const BudgetSheet = () => {
       .catch((err) => err);
   }, [formValues.business_function]);
 
-  console.log("formValues", formValues);
-  console.log("budgetDataApi", budgetDataApi);
-  console.log("BusinessFunction", BusinessFunction);
-  console.log("practiceNameApi", practiceNameApi);
-  console.log("customerNameApi", customerNameApi);
-  console.log("formErr", formErr);
-
   // Handler for select box changes
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -209,11 +192,11 @@ const BudgetSheet = () => {
       budget_total: 0,
       item_description: "",
       cost_center: "",
-      entries: [
-        { budgetMonth: "10", year: "24", estimatedBudget: "" },
-        { budgetMonth: "11", year: "24", estimatedBudget: "" },
-        { budgetMonth: "12", year: "24", estimatedBudget: "" },
-      ],
+      // entries: [
+      //   { budgetMonth: "10", year: "24", estimatedBudget: "" },
+      //   { budgetMonth: "11", year: "24", estimatedBudget: "" },
+      //   { budgetMonth: "12", year: "24", estimatedBudget: "" },
+      // ],
 
       month_1: "",
       month_2: "",
@@ -248,7 +231,6 @@ const BudgetSheet = () => {
 
     if (Object.keys(validated)?.length > 0 || !isChildDataFilled) {
       setFormErr(validated);
-      //   // toast.dismiss();
       let msg = "Please complete all the fields.";
 
       toast.error(msg);
@@ -260,11 +242,12 @@ const BudgetSheet = () => {
   //popup OK button
   const handleConfirmSubmit = () => {
     setLoader(true);
-    let updateTotal = budgetDataApi.map((item) => {
-      delete item.entries;
-      return item;
-    });
-    let postData = { ...formValues, child: updateTotal };
+    // let updateTotal = budgetDataApi.map((item) => {
+    //   delete item.entries;
+    //   return item;
+    // });
+    // let postData = { ...formValues, child: updateTotal };
+    let postData = { ...formValues, child: budgetDataApi };
     console.log("postData", postData);
 
     saveBudgetData(postData)
@@ -292,78 +275,30 @@ const BudgetSheet = () => {
     setBudgetDataApi(filteredData);
   };
 
-  //hanlde month change
-  const handleMonthChange = (e, monthValue, rowIndex, idx, isActual) => {
-    const newArray = [...budgetDataApi];
-    if (!newArray[rowIndex]) {
-      console.error(`Row index ${rowIndex} is out of bounds in newArray.`);
-      return;
-    }
-    // Convert the input value to a number
-    let newValue = parseFloat(e.target.value) || 0;
-    // -----------------
-    if (idx === 0) {
-      newArray[rowIndex].month_1 = newValue;
-    }
-    if (idx === 1) {
-      newArray[rowIndex].month_2 = newValue;
-    }
-    if (idx === 2) {
-      newArray[rowIndex].month_3 = newValue;
-    }
-    const total =
-      (parseFloat(newArray[rowIndex].month_1) || 0) +
-      (parseFloat(newArray[rowIndex].month_2) || 0) +
-      (parseFloat(newArray[rowIndex].month_3) || 0);
-    newArray[rowIndex].budget_total = total;
-
-    // -----------------
-
-    let monthName = monthValue?.split("-")[0]; //"Jan,Feb",..
-    const monthNumber = monthMap[monthName]; //"04","05",..
-
-    const month = monthNumber.toString();
-    const yearShort = monthValue?.split("-")[1]; // "2024"
-
-    // Find the index of the entry to update or remove
-    const entryIndex = newArray[rowIndex]?.entries?.findIndex(
-      // (entry) => entry.budgetMonth === month && entry.budgetYear === yearShort
-      (entry) => entry.budgetMonth === month
-    );
-    if (newValue > 0) {
-      if (entryIndex !== -1) {
-        // If the entry exists, update the estimatedBudget
-        newArray[rowIndex].entries[entryIndex] = {
-          ...newArray[rowIndex].entries[entryIndex],
-          estimatedBudget: newValue,
-        };
-      } else {
-        // If the entry does not exist, create a new one
-        const newEntry = {
-          budgetMonth: month,
-          budgetYear: yearShort,
-          componentId: newArray[rowIndex].UUID, // Component ID from the row
-          budgetId: null,
-          estimatedBudget: newValue,
-        };
-        newArray[rowIndex].entries.push(newEntry);
-      }
-    } else {
-      if (entryIndex !== -1) {
-        newArray[rowIndex].entries.splice(entryIndex, 1);
-      }
-    }
-    setBudgetDataApi(newArray);
-  };
-
-  let totals = calculateTotals(budgetDataApi, months, monthMap, "R");
-
   //Validation field for parents data - handle focus
   useEffect(() => {
     let errorFields = handleFocusFormData(formErr, formValues);
     setFormErr(errorFields);
   }, [formValues]);
 
+  //handleChangeBudgetInput
+  const handleChangeBudgetInput = (e, rowIndex) => {
+    let { name, value } = e.target;
+
+    const newRows = [...budgetDataApi];
+
+    newRows[rowIndex][name] = value;
+
+    const totalBudget =
+      (parseFloat(newRows[rowIndex].month_1) || 0) +
+      (parseFloat(newRows[rowIndex].month_2) || 0) +
+      (parseFloat(newRows[rowIndex].month_3) || 0);
+
+    newRows[rowIndex].budget_total = totalBudget;
+
+    setBudgetDataApi(newRows);
+    setIsChildError(false);
+  };
   return (
     <div className="home-main-con">
       <div className="home-main-wrapper">
@@ -382,7 +317,6 @@ const BudgetSheet = () => {
               <div className="form-div">
                 {/* Region --1 */}
                 <div
-                  // className="field-con form-col-sec select-search-container-section"
                   className={`field-con form-col-sec select-search-container-section ${
                     formErr?.region && "field-error"
                   }`}
@@ -528,16 +462,14 @@ const BudgetSheet = () => {
                             <tr className="">
                               <th className="header-th" colSpan="12">
                                 <div>
-                                  TOTAL Q4 BUDGET:
+                                  {`TOTAL Q${currentQuarter?.quarter} BUDGET:`}
                                   <span>
                                     {`${decode(currencyIcon(), {
                                       level: "html5",
-                                    })} ${totals
-                                      .reduce(
-                                        (acc, curr) => acc + curr.value,
-                                        0
-                                      )
-                                      .toFixed(2)}`}
+                                    })} 
+                                    ${returnTotalsBudget(budgetDataApi)}
+                                      
+                                      `}
                                   </span>
                                 </div>
                               </th>
@@ -555,13 +487,12 @@ const BudgetSheet = () => {
                                 Cost Center
                                 <small className="mandatory-small">*</small>
                               </th>
-                              {/* Months - header th */}
-                              {months.map((month) => (
-                                <th>{month}</th>
+
+                              {currentQuarter?.quarter_months?.map((month) => (
+                                <th>{`${month}-${currentQuarter?.year
+                                  ?.toString()
+                                  .slice(-2)}`}</th>
                               ))}
-                              {/* {currentQuarter.quarter_months?.map((month) => (
-                                <th>{`${month}-${currentQuarter?.year}`}</th>
-                              ))} */}
 
                               <th>Total</th>
                               <th>Remarks</th>
@@ -578,14 +509,10 @@ const BudgetSheet = () => {
                                     <select
                                       style={{ padding: "12px" }}
                                       value={row.budget_type}
-                                      onChange={(e) => {
-                                        const newRows = [...budgetDataApi];
-                                        newRows[rowIndex].budget_type =
-                                          e.target.value;
-
-                                        setBudgetDataApi(newRows);
-                                        setIsChildError(false);
-                                      }}
+                                      name="budget_type"
+                                      onChange={(e) =>
+                                        handleChangeBudgetInput(e, rowIndex)
+                                      }
                                       className={
                                         !budgetDataApi[rowIndex]?.budget_type &&
                                         isChildError &&
@@ -620,14 +547,9 @@ const BudgetSheet = () => {
                                         "field-error"
                                       }
                                       value={row.item_description}
-                                      onChange={(e) => {
-                                        const newRows = [...budgetDataApi];
-                                        newRows[rowIndex].item_description =
-                                          e.target.value;
-
-                                        setBudgetDataApi(newRows);
-                                        setIsChildError(false);
-                                      }}
+                                      onChange={(e) =>
+                                        handleChangeBudgetInput(e, rowIndex)
+                                      }
                                     />
                                   </div>
                                 </td>
@@ -644,42 +566,55 @@ const BudgetSheet = () => {
                                         "field-error"
                                       }
                                       value={row.cost_center}
-                                      onChange={(e) => {
-                                        const newRows = [...budgetDataApi];
-                                        newRows[rowIndex].cost_center =
-                                          e.target.value;
-
-                                        setBudgetDataApi(newRows);
-                                        setIsChildError(false);
-                                      }}
+                                      onChange={(e) =>
+                                        handleChangeBudgetInput(e, rowIndex)
+                                      }
                                     />
                                   </div>
                                 </td>
+
                                 {/* Months */}
-                                {months.map((monthValue, idx) => (
-                                  <td key={idx}>
-                                    <div className="month-td-div">
-                                      <input
-                                        autoComplete="off"
-                                        type="number"
-                                        value={getMonthValue(
-                                          row,
-                                          monthValue,
-                                          idx
-                                        )}
-                                        onChange={(e) =>
-                                          handleMonthChange(
-                                            e,
-                                            monthValue,
-                                            rowIndex,
-                                            idx,
-                                            "estimateBudget"
-                                          )
-                                        }
-                                      />
-                                    </div>
-                                  </td>
-                                ))}
+
+                                <td>
+                                  <div className="month-td-div">
+                                    <input
+                                      autoComplete="off"
+                                      type="number"
+                                      name="month_1"
+                                      value={row?.month_1}
+                                      onChange={(e) =>
+                                        handleChangeBudgetInput(e, rowIndex)
+                                      }
+                                    />
+                                  </div>
+                                </td>
+                                <td>
+                                  <div className="month-td-div">
+                                    <input
+                                      autoComplete="off"
+                                      type="number"
+                                      name="month_2"
+                                      value={row?.month_2}
+                                      onChange={(e) =>
+                                        handleChangeBudgetInput(e, rowIndex)
+                                      }
+                                    />
+                                  </div>
+                                </td>
+                                <td>
+                                  <div className="month-td-div">
+                                    <input
+                                      autoComplete="off"
+                                      type="number"
+                                      name="month_3"
+                                      value={row?.month_3}
+                                      onChange={(e) =>
+                                        handleChangeBudgetInput(e, rowIndex)
+                                      }
+                                    />
+                                  </div>
+                                </td>
+
                                 {/* Total Row values */}
                                 <td>
                                   <div className="total-row-cal">
@@ -691,10 +626,7 @@ const BudgetSheet = () => {
                                         "field-error"
                                       }
                                       type="text"
-                                      value={calculateRowTotal(
-                                        row,
-                                        "estimateBudget"
-                                      )}
+                                      value={returnTotalRowValue(row)}
                                       readOnly
                                     />
                                   </div>
@@ -708,13 +640,9 @@ const BudgetSheet = () => {
                                       name="remarks"
                                       autoComplete="off"
                                       value={row.remarks}
-                                      onChange={(e) => {
-                                        const newRows = [...budgetDataApi];
-                                        newRows[rowIndex].remarks =
-                                          e.target.value;
-
-                                        setBudgetDataApi(newRows);
-                                      }}
+                                      onChange={(e) =>
+                                        handleChangeBudgetInput(e, rowIndex)
+                                      }
                                     />
                                   </div>
                                 </td>
@@ -753,15 +681,20 @@ const BudgetSheet = () => {
                                   Total per month
                                 </div>
                               </td>
-                              {totals.map((total, index) => (
-                                <td style={{ textAlign: "end" }} key={index}>
-                                  {total.value.toFixed(2)}
-                                </td>
-                              ))}
+
+                              {currentQuarter?.quarter_months.map(
+                                (month, index) => (
+                                  <td style={{ textAlign: "end" }} key={index}>
+                                    {
+                                      returnColumnValue(budgetDataApi)[
+                                        "month" + (index + 1)
+                                      ]
+                                    }
+                                  </td>
+                                )
+                              )}
                               <td style={{ textAlign: "end" }}>
-                                {totals
-                                  .reduce((acc, curr) => acc + curr.value, 0)
-                                  .toFixed(2)}
+                                {returnTotalsBudget(budgetDataApi)}
                               </td>
                               <td></td>
                             </tr>
