@@ -24,6 +24,9 @@ import { decode } from "html-entities";
 import ConfirmPopup from "../../components/SubmitPopup/SubmitPopup/ConfirmPopup";
 import FullpageLoader from "../../components/FullPageLoader/FullPageLoader";
 
+import * as Yup from "yup";
+import { useFormik } from "formik";
+
 const BudgetSheet = () => {
   const navigate = useNavigate();
   const [isSubmit, setIsSubmit] = useState(false);
@@ -100,6 +103,26 @@ const BudgetSheet = () => {
   const [customerNameApi, setCustomerApiData] = useState([]);
 
   const [businessName, setBusinessName] = useState([]);
+
+  //formik starts
+  const formValidationSchema = Yup.object({
+    group: Yup.string().required("Field is required."),
+  });
+  const {
+    values,
+    errors,
+    handleChange: handleFormikChangee,
+    handleSubmit: handleFormikSubmit,
+    touched,
+  } = useFormik({
+    initialValues: { group: "" },
+    validationSchema: formValidationSchema,
+    onSubmit: (values) => {
+      console.log("valuessss", values);
+    },
+  });
+
+  //formik ends
 
   //Api Calls
   useEffect(() => {
@@ -711,6 +734,22 @@ const BudgetSheet = () => {
                 </button>
               </div>
             </form>
+            {/* <form onSubmit={handleFormikSubmit}>
+           
+              <div className="field-con">
+                <label htmlFor="project_name">Group Name</label>
+                <input
+                  // className={formErr?.project_name && "field-error"}
+                  type="text"
+                  autoComplete="off"
+                  name="group"
+                  placeholder="Enter group name"
+                  value={values.group}
+                  onChange={handleChange}
+                />
+              </div>
+              <button type="submit">Send</button>
+            </form> */}
           </div>
         </div>
       </div>
