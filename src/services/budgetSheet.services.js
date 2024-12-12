@@ -6,8 +6,8 @@ export const getDepartmentData = async () => {
   let token = getUserIdToken();
   return await axios.get(apiEndpoints.departmentFilter, {
     headers: {
-      Authorization: token,
-      // Authorization: "Bearer " + token,
+      // Authorization: token,
+      Authorization: "Bearer " + token,
     },
   });
 };
@@ -20,8 +20,8 @@ export const getPracticeData = async (id) => {
   let token = getUserIdToken();
   return await axios.get(`${apiEndpoints.practiceFilter}?id=${id}`, {
     headers: {
-      Authorization: token,
-      // Authorization: "Bearer " + token,
+      // Authorization: token,
+      Authorization: "Bearer " + token,
     },
   });
 };
@@ -29,8 +29,8 @@ export const getCustomerData = async () => {
   let token = getUserIdToken();
   return await axios.get(apiEndpoints.customerFilter, {
     headers: {
-      Authorization: token,
-      // Authorization: "Bearer " + token,
+      // Authorization: token,
+      Authorization: "Bearer " + token,
     },
   });
 };
@@ -38,8 +38,8 @@ export const saveBudgetData = async (data) => {
   let token = getUserIdToken();
   return await axios.post(apiEndpoints.saveFilter, data, {
     headers: {
-      Authorization: token,
-      // Authorization: "Bearer " + token,
+      // Authorization: token,
+      Authorization: "Bearer " + token,
     },
   });
 };
