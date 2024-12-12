@@ -14,11 +14,11 @@ function Authentication() {
 
   const header = {
     headers: {
-      Authorization: params?.id,
+      Authorization: "Bearer " + params?.id,
     },
   };
+  console.log("sectionUrl", sectionUrl, header);
   useEffect(() => {
-    console.log("sectionUrl", sectionUrl, header);
     axios
       .get(sectionUrl, header)
       .then((response) => {
