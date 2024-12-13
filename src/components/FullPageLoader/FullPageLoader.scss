@@ -1,5 +1,6 @@
 .ReactModal__Content {
-  background: #e2f2ff !important;
+  background: rgb(166 172 209) !important;
+  box-shadow: 2px 3px 10px #5a42428a;
 }
 .full-page-loader {
   width: 600px;
@@ -12,9 +13,9 @@
   img {
     width: 30px;
     margin-right: 10px;
-    // filter: invert(1);
+    filter: invert(1);
   }
   span {
-    color: $text-color;
+    color: $main-white;
   }
 }

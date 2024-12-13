@@ -2,7 +2,7 @@ import UserIcon from "../../assets/images/user.png";
 import InhouseImg from "../../assets/images/reports.png";
 import submitImg from "../../assets/images/Submitted Budget.png";
 import budgetPlan from "../../assets/images/budgetPlan.png";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import routePath from "../../routes/routePath";
 import { decodeUser } from "../../services/auth";
 import { useEffect, useState } from "react";
@@ -12,6 +12,7 @@ import { getUserAccessList } from "../../services/sidebarService";
 
 const Sidebar = () => {
   const [accessUser, setAccessUser] = useState(false);
+  const navigate = useNavigate();
 
   // const accessUser = [
   //   "devanshi.jadav@yopmail.com",
@@ -32,7 +33,10 @@ const Sidebar = () => {
           setAccessUser(res.data.userAccess?.super_access);
         }
       })
-      .catch((err) => err);
+      .catch((err) => {
+        console.log("err", err);
+        // navigate(routePath.unAuthorized)
+      });
   }, []);
   return (
     <div className="sidebar-container">

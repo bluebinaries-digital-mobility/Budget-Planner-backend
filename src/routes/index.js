@@ -38,6 +38,7 @@ const AppRoutes = () => {
         <Route path={routePath.unAuthorized} element={<UnAuthroized />} />
 
         <Route
+          path="/"
           element={
             <PrivateRoutes>
               <CommonOutlet />

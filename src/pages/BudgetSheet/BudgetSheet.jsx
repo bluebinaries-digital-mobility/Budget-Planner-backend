@@ -107,7 +107,7 @@ const BudgetSheet = () => {
 
   const [BusinessFunction, setBusinessFunction] = useState([]);
   const [practiceNameApi, setPracticeApiData] = useState([]);
-  const [customerNameApi, setCustomerApiData] = useState([]);
+  // const [customerNameApi, setCustomerApiData] = useState([]);
 
   const [businessName, setBusinessName] = useState([]);
 
@@ -126,19 +126,19 @@ const BudgetSheet = () => {
         }
       })
       .catch((err) => err);
-    getCustomerData()
-      .then((res) => {
-        if (res.status === 200 && res.data) {
-          let cusDetails = res.data?.customer?.map(function (obj, i) {
-            obj["label"] = obj["client_name"];
-            obj["name"] = obj["client_name"];
-            obj["value"] = obj["client_name"];
-            return obj;
-          });
-          setCustomerApiData(cusDetails);
-        }
-      })
-      .catch((err) => err);
+    // getCustomerData()
+    //   .then((res) => {
+    //     if (res.status === 200 && res.data) {
+    //       let cusDetails = res.data?.customer?.map(function (obj, i) {
+    //         obj["label"] = obj["client_name"];
+    //         obj["name"] = obj["client_name"];
+    //         obj["value"] = obj["client_name"];
+    //         return obj;
+    //       });
+    //       setCustomerApiData(cusDetails);
+    //     }
+    //   })
+    //   .catch((err) => err);
   }, []);
 
   // filter Practice api data
@@ -185,7 +185,7 @@ const BudgetSheet = () => {
   console.log("budgetDataApi", budgetDataApi);
   console.log("BusinessFunction", BusinessFunction);
   console.log("practiceNameApi", practiceNameApi);
-  console.log("customerNameApi", customerNameApi);
+  // console.log("customerNameApi", customerNameApi);
   console.log("formErr", formErr);
 
   // Handler for select box changes
@@ -680,7 +680,7 @@ const BudgetSheet = () => {
                                     </div>
                                   </td>
                                 ))}
-                                {/* Total Row values */}
+                                {/* Total - Row values */}
                                 <td>
                                   <div className="total-row-cal">
                                     <input
